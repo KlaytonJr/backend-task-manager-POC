@@ -26,7 +26,7 @@ class UserController extends Controller {
     try {
       const users = await User.find();
 
-      return res.send(responseOk(res, users));
+      return responseOk(res, users);
     } catch (error) {
       return res.send(new ServerErrorException(error));
     }
@@ -40,7 +40,7 @@ class UserController extends Controller {
 
       const user = await User.findById(id);
 
-      return res.send(responseOk(res, user));
+      return responseOk(res, user);
     } catch (error) {
       return res.send(new ServerErrorException(error));
     }
@@ -50,7 +50,7 @@ class UserController extends Controller {
     try {
       const user = await User.create(req.body);
 
-      return res.send(responseCreate(res, user));
+      return responseCreate(res, user);
     } catch (error) {
       return res.send(new ServerErrorException(error));
     }
@@ -63,7 +63,7 @@ class UserController extends Controller {
 
       const user = await User.findByIdAndUpdate(id, req.body, () => {});
 
-      return res.send(responseOk(res, user));
+      return responseOk(res, user);
     } catch (error) {
       return res.send(new ServerErrorException(error));
     }
@@ -77,7 +77,7 @@ class UserController extends Controller {
       const user = await User.findById(id, req.body, () => {});
       if (user) {
         user.deleteOne();
-        return res.send(responseOk(res, user));
+        return responseOk(res, user);
       }
       return res.status(HttpStatusCode.NO_CONTENT).send(new NoContentException());
     } catch (error) {
