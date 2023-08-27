@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Types } from 'mongoose';
 import Controller from './Controller';
 import User from '../schemas/User';
+import ValidationService from '../services/ValidationService';
 
 class UserController extends Controller {
   constructor() {
@@ -25,7 +26,7 @@ class UserController extends Controller {
   private async findById(req: Request, res: Response, next: NextFunction): Promise<Response> {
     const { id } = req.params;
 
-    if (!Types.ObjectId.isValid(id)) return res.status(400).send('invalid ID');
+    if (ValidationService.validateId(id, next)) return res.status(400).send('invalid ID');
 
     const user = await User.findById(id);
 
@@ -40,7 +41,7 @@ class UserController extends Controller {
 
   private async edit(req: Request, res: Response, next: NextFunction): Promise<Response> {
     const { id } = req.params;
-    if (!Types.ObjectId.isValid(id)) return res.status(400).send('invalid ID');
+    if (ValidationService.validateId(id, next)) return res.status(400).send('invalid ID');
 
     const user = await User.findByIdAndUpdate(id, req.body, () => {});
 
@@ -49,7 +50,7 @@ class UserController extends Controller {
 
   private async delete(req: Request, res: Response, next: NextFunction): Promise<Response> {
     const { id } = req.params;
-    if (!Types.ObjectId.isValid(id)) return res.status(400).send('invalid ID');
+    if (ValidationService.validateId(id, next)) return res.status(400).send('invalid ID');
 
     const user = await User.findById(id, req.body, () => {});
     if (user) {
