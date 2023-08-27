@@ -8,6 +8,7 @@ import NoContentException from '../errors/NoContentException';
 import HttpStatusCode from '../responses/HttpStatusCode';
 import responseCreate from '../responses/ResponseCreate';
 import responseOk from '../responses/ResponseOk';
+import UserService from '../services/UserService';
 
 class UserController extends Controller {
   constructor() {
@@ -75,6 +76,7 @@ class UserController extends Controller {
     try {
       const { id } = req.params;
       if (ValidationService.validateId(id, next)) return;
+      if (await UserService.validateExistAnyTask(id, next)) return;
 
       const user = await User.findById(id, req.body, () => {});
       if (user) {
